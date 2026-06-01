@@ -20,6 +20,15 @@ jobs:
       - name: Build web
         run: flutter build web --release
 
+      - name: Add cache-busting to asset URLs
+        run: |
+          sha=${GITHUB_SHA::8}
+          if [ -f build/web/index.html ]; then
+            sed -i "s|flutter_bootstrap.js|flutter_bootstrap.js?v=${sha}|g" build/web/index.html
+            sed -i "s|main.dart.js|main.dart.js?v=${sha}|g" build/web/index.html
+            sed -i "s|flutter.js|flutter.js?v=${sha}|g" build/web/index.html
+          fi
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
