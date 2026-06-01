@@ -29,6 +29,15 @@ self.addEventListener('install', function(e) { self.skipWaiting(); });
 self.addEventListener('activate', function(e) { self.registration.unregister(); });
 SW
 
+      - name: Rename main bundle with short SHA to force cache-bust
+        run: |
+          sha=${GITHUB_SHA::8}
+          if [ -f build/web/main.dart.js ]; then
+            cp build/web/main.dart.js build/web/main.${sha}.dart.js
+            # Update flutter.js buildConfig mainJsPath to the new filename
+            sed -i "s|\"mainJsPath\":\"main.dart.js\"|\"mainJsPath\":\"main.${sha}.dart.js\"|g" build/web/flutter.js
+          fi
+
 
 
       - name: Deploy to GitHub Pages
