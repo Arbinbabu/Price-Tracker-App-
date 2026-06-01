@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "985775079155",
+    "project_id": "price-tracker-61b3f",
+    "storage_bucket": "price-tracker-61b3f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:985775079155:android:7a9bf2af5e1bf674a9c186",
+        "android_client_info": {
+          "package_name": "com.price_tracker.price_tracker_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVO6npnw5UqBRRQ39bqsLbShl9ljPVY-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

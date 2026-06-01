@@ -13,6 +13,7 @@ class AuthService {
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
+
   Future<void>? _googleSignInInitialization;
 
   Future<void> _ensureGoogleSignInInitialized() {
@@ -56,30 +57,35 @@ class AuthService {
 
   Future<UserCredential> signInWithGoogle() async {
     if (kIsWeb) {
-      return _auth.signInWithPopup(GoogleAuthProvider());
+      final provider = GoogleAuthProvider();
+      try {
+        return await _auth.signInWithPopup(provider);
+      } catch (e) {
+        throw FirebaseAuthException(
+          code: 'ERROR_WEB_SIGNIN',
+          message: 'Web Google sign-in failed: $e. Ensure popups are allowed and add localhost/127.0.0.1 to Firebase authorized domains.',
+        );
+      }
     }
 
     await _ensureGoogleSignInInitialized();
 
-    final googleUser = await _googleSignIn.authenticate();
-    final googleAuth = googleUser.authentication;
-    if (googleAuth.idToken == null) {
-      throw FirebaseAuthException(code: 'aborted-by-user', message: 'Google sign-in was cancelled.');
-    }
+    final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+    final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
     final credential = GoogleAuthProvider.credential(
       idToken: googleAuth.idToken,
     );
 
-    return _auth.signInWithCredential(credential);
+    return await _auth.signInWithCredential(credential);
   }
 
   Future<void> signOut() async {
-    await _ensureGoogleSignInInitialized();
+    await _auth.signOut();
 
-    await Future.wait([
-      _auth.signOut(),
-      _googleSignIn.signOut(),
-    ]);
+    if (!kIsWeb) {
+      await _ensureGoogleSignInInitialized();
+      await _googleSignIn.signOut();
+    }
   }
 }

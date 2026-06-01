@@ -31,6 +31,19 @@ class FirestoreService {
     });
   }
 
+  Stream<ProductModel?> watchProduct(String productId) {
+    return _firestore.collection('products').doc(productId).snapshots().map((snapshot) {
+      final data = snapshot.data();
+      if (!snapshot.exists || data == null) {
+        return null;
+      }
+
+      final json = Map<String, dynamic>.from(data);
+      json['productId'] ??= snapshot.id;
+      return ProductModel.fromJson(json);
+    });
+  }
+
   Future<void> addProductToUserList(String uid, String productId) async {
     await _firestore.collection('users').doc(uid).set(
       {'trackedProducts': FieldValue.arrayUnion([productId])},

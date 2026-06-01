@@ -24,9 +24,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isLoggedIn = FirebaseAuth.instance.currentUser != null;
       final isAuthRoute = state.matchedLocation.startsWith('/auth');
       final isSplash = state.matchedLocation == '/splash';
+      final isDashboard = state.matchedLocation == '/dashboard';
 
       if (isSplash) {
-        return isLoggedIn ? '/home' : '/auth/login';
+        return isLoggedIn ? '/dashboard' : '/auth/login';
       }
 
       if (!isLoggedIn && !isAuthRoute && !isSplash) {
@@ -34,7 +35,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       }
 
       if (isLoggedIn && (isAuthRoute || isSplash)) {
-        return '/home';
+        return '/dashboard';
+      }
+
+      if (isLoggedIn && isDashboard) {
+        return null;
       }
 
       return null;
@@ -57,6 +62,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
         path: '/home',
+        builder: (context, state) => const HomeScreen(),
+      ),
+      GoRoute(
+        path: '/dashboard',
         builder: (context, state) => const HomeScreen(),
       ),
       GoRoute(

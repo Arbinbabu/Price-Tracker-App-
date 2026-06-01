@@ -12,7 +12,9 @@ class PriceTrackerApp extends ConsumerWidget {
     return MaterialApp.router(
       title: 'Price Tracker',
       debugShowCheckedModeBanner: false,
-      theme: buildAppTheme(),
+      theme: buildAppTheme(Brightness.light),
+      darkTheme: buildAppTheme(Brightness.dark),
+      themeMode: ThemeMode.system,
       routerConfig: ref.watch(routerProvider),
     );
   }

@@ -39,10 +39,14 @@ dependencies:
   firebase_messaging: any
   fl_chart: any
   flutter_local_notifications: any
+  flutter_dotenv: any
   flutter_riverpod: any
   go_router: any
   google_sign_in: any
+  http: any
+  google_fonts: any
   intl: any
+  percent_indicator: any
   riverpod_annotation: any
   shimmer: any
   url_launcher: any
@@ -68,6 +72,9 @@ flutter:
   # included with your application, so that you can use the icons in
   # the material Icons class.
   uses-material-design: true
+
+  assets:
+    - .env
 
   # To add assets to your application, add an assets section, like this:
   # assets:
