@@ -18,7 +18,16 @@ jobs:
         run: flutter pub get
 
       - name: Build web
-        run: flutter build web --release
+        run: flutter build web --release --base-href /Price-Tracker-App-/
+
+      - name: Replace service worker to avoid stale caches
+        run: |
+          # Create a tiny service worker that unregisters itself on activation.
+          # This helps edge caches / previously installed workers stop serving old bundles.
+          cat > build/web/flutter_service_worker.js <<'SW'
+self.addEventListener('install', function(e) { self.skipWaiting(); });
+self.addEventListener('activate', function(e) { self.registration.unregister(); });
+SW
 
 
 
